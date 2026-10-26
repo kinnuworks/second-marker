@@ -25,14 +25,14 @@ export default function Home() {
         <section className="hero hero--split">
           <div className="container">
             <div>
-              <span className="badge badge--dot">For CBSE Class 12 students, the week after results</span>
+              <span className="badge badge--dot">For students deciding whether to ask for a re-mark</span>
               <h1 className={styles.heroTitle}>
                 Find the marks your examiner <span className="hl">missed</span>.
               </h1>
               <p className="lead">
-                Upload the scanned copy of your marked answer book. Second Marker re-adds every mark, checks each answer
-                against the official marking scheme step by step, and tells you which questions are worth paying to
-                re-evaluate.
+                Upload your marked exam paper and the marking scheme it was graded against. Second Marker re-adds every
+                mark, checks each answer step by step, and tells you which questions are worth sending back for a re-mark,
+                and which could cost you marks.
               </p>
               <div className="cta-row">
                 <Link href="/check?sample=1" className="btn btn-candy btn-lg">
@@ -56,14 +56,14 @@ export default function Home() {
         <section className={`section ${styles.factsBand}`} aria-label="How re-evaluation works">
           <div className="container">
             <div className={styles.facts}>
-              <Fact big="₹100" small="per question to re-evaluate" />
-              <Fact big="10" small="questions at most, per subject" />
-              <Fact big="days" small="to decide, after the scanned copy arrives" />
+              <Fact big="fee" small="many boards charge for a re-mark, per question or per paper" />
+              <Fact big="days" small="is often all the time you get to ask" />
               <Fact big="↓" small="a second look can lower your marks too" red />
+              <Fact big="28,000+" small="re-mark and re-count requests to one board, CBSE, in 2025" />
             </div>
             <p className={styles.factNote}>
-              Exam guides tell students to get the photocopy checked by a teacher before applying. Few teachers have time to
-              go through twenty pages in the week the window is open.
+              The usual advice is to have a teacher look over your paper before you ask. Few teachers have time to go through
+              twenty pages in the few days the window is open.
             </p>
           </div>
         </section>
@@ -74,14 +74,14 @@ export default function Home() {
             <div className="section-head">
               <span className="eyebrow">The decision</span>
               <h2>
-                Which questions are worth ₹100? <span className="t-muted">Now you can tell.</span>
+                Which questions are worth sending back? <span className="t-muted">Now you can tell.</span>
               </h2>
             </div>
             <div className="grid grid-2">
               <div className="card card--flat">
                 <p className="t-title">On your own</p>
                 <ul className={styles.list}>
-                  <li>Twenty scanned pages and a marking scheme PDF, side by side</li>
+                  <li>Twenty pages of your paper and a marking scheme, side by side</li>
                   <li>Adding up the margin marks by hand to check the cover</li>
                   <li>Guessing which answers the examiner rushed</li>
                   <li>Paying for questions that come back the same, or lower</li>
@@ -127,11 +127,12 @@ export default function Home() {
                 <span className="eyebrow"><span className="dot" /> Step 2</span>
                 <h3>Each answer meets the official scheme.</h3>
                 <p className="lead">
-                  The board&rsquo;s marking scheme gives marks for steps. Every step is marked credited, written but not
+                  Marking schemes and rubrics give marks for steps. Every step is marked credited, written but not
                   credited, or not written, and your own line is quoted next to it.
                 </p>
                 <div className="chips">
-                  <span className="chip">CBSE Class 12 Maths 2025–26</span>
+                  <span className="chip">Paste any rubric or answer key</span>
+                  <span className="chip">Built in: CBSE Class 12 Maths</span>
                   <span className="chip">Different methods flagged</span>
                 </div>
               </div>
@@ -145,8 +146,8 @@ export default function Home() {
                 <span className="eyebrow"><span className="dot" /> Step 3</span>
                 <h3>Plain arithmetic decides what to dispute.</h3>
                 <p className="lead">
-                  The possible gain, the fee, the 10-question cap and the risk of losing marks are worked out by ordinary code
-                  you can read. If the examiner was already generous, it tells you to leave that question alone.
+                  The possible gain, any fee or question limit, and the risk of losing marks are worked out by ordinary code you
+                  can read. If the examiner was already generous, it tells you to leave that question alone.
                 </p>
                 <div className={styles.stampPair}>
                   <div>
@@ -176,15 +177,15 @@ export default function Home() {
             <div className="faq">
               <details>
                 <summary>Does it file the application for me?</summary>
-                <p>No. You apply on the board&rsquo;s post-result website yourself. Second Marker gives you a filing sheet with the questions and the scheme steps to cite.</p>
+                <p>No. You ask your exam board, school or university yourself. Second Marker gives you a sheet with the questions and the scheme steps to cite.</p>
               </details>
               <details>
                 <summary>Can it promise my marks will go up?</summary>
-                <p>No. The board decides. Second Marker shows the evidence on your own page and the odds, and it warns you when a question could lose marks.</p>
+                <p>No. Your examiners decide. Second Marker shows the evidence on your own page and warns you when a question could lose marks.</p>
               </details>
               <details>
-                <summary>Which papers does it know?</summary>
-                <p>Right now, CBSE Class 12 Mathematics: the 2025–26 sample paper with its official marking scheme. Each new subject needs its scheme typed in and checked first.</p>
+                <summary>Which exams does it work with?</summary>
+                <p>Any marked paper, if you have the marking scheme, rubric or answer key: paste it in and Second Marker turns it into steps. One paper is built in and checked by hand: CBSE Class 12 Mathematics 2025–26, with its official scheme.</p>
               </details>
               <details>
                 <summary>What if my handwriting is hard to read?</summary>
@@ -196,7 +197,7 @@ export default function Home() {
               </details>
               <details>
                 <summary>Should I still ask a teacher?</summary>
-                <p>If you can, yes. Take the filing sheet with you: it points to the exact lines and scheme steps, so a teacher can check in a few minutes.</p>
+                <p>If you can, yes. Take the sheet with you: it points to the exact lines and scheme steps, so a teacher can check in a few minutes.</p>
               </details>
             </div>
           </div>
@@ -224,7 +225,7 @@ export default function Home() {
       <footer className="footer">
         <div className="container">
           <span style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
-            <AppIcon size={22} /> Second Marker. Not affiliated with CBSE.
+            <AppIcon size={22} /> Second Marker. Not affiliated with any exam board.
           </span>
           <span>
             Sources: <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2025_26/Maths-MS.pdf">marking scheme</a>,{" "}

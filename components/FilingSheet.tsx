@@ -51,7 +51,7 @@ export function FilingSheet() {
           </header>
 
           <section className={styles.block}>
-            <h2><span className={styles.n}>1</span> Verification of marks</h2>
+            <h2><span className={styles.n}>1</span> Re-count of marks</h2>
             {data.totals.recommendVerification ? (
               <>
                 <p>
@@ -59,7 +59,7 @@ export function FilingSheet() {
                   {mismatch && mismatch.kind === "total_mismatch"
                     ? `The marks inside add up to ${fmt(mismatch.added)}, but the cover total is ${fmt(mismatch.cover)}.`
                     : "Some answers look unmarked or over the limit."}{" "}
-                  Verification checks totalling and unmarked answers, and costs less than re-evaluation.
+                  A re-count checks the adding up and unmarked answers, and usually costs less than a re-mark.
                 </p>
                 <div className={styles.stampRow}><Stamp kind="DISPUTE" size="sm" /> <span>Totalling error</span></div>
               </>
@@ -69,9 +69,9 @@ export function FilingSheet() {
           </section>
 
           <section className={styles.block}>
-            <h2><span className={styles.n}>2</span> Re-evaluation of these questions</h2>
+            <h2><span className={styles.n}>2</span> Re-marking of these questions</h2>
             {data.rows.length === 0 ? (
-              <p>No questions selected. Based on the marking scheme, re-evaluation isn&rsquo;t worth paying for.</p>
+              <p>No questions selected. Based on the marking scheme, a re-mark isn&rsquo;t worth asking for.</p>
             ) : (
               <table className={styles.table}>
                 <thead>
@@ -94,15 +94,15 @@ export function FilingSheet() {
                         ))}
                       </td>
                       <td className="num hand" style={{ color: "var(--green)", fontSize: 22 }}>+{fmt(r.possibleGain)}</td>
-                      <td className="num">₹{data.fee}</td>
+                      <td className="num">{data.currency}{data.fee}</td>
                     </tr>
                   ))}
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colSpan={3}>{data.rows.length} question{data.rows.length === 1 ? "" : "s"} (the limit is 10 per subject)</td>
+                    <td colSpan={3}>{data.rows.length} question{data.rows.length === 1 ? "" : "s"} </td>
                     <td className="num hand" style={{ color: "var(--green)", fontSize: 22 }}>+{fmt(gain)}</td>
-                    <td className="num"><strong>₹{data.rows.length * data.fee}</strong></td>
+                    <td className="num"><strong>{data.currency}{data.rows.length * data.fee}</strong></td>
                   </tr>
                 </tfoot>
               </table>
@@ -112,10 +112,10 @@ export function FilingSheet() {
           <section className={styles.block}>
             <h2><span className={styles.n}>3</span> Before you pay</h2>
             <ul className={styles.list}>
-              <li>Apply on the board&rsquo;s post-result portal, inside its dates. Late or offline applications aren&rsquo;t accepted.</li>
-              <li>Re-evaluation can lower a mark as well as raise it. Only file questions where the missed steps are clearly on your page.</li>
+              <li>Apply through {data.board}&rsquo;s re-mark or review process, inside its dates.</li>
+              <li>A re-mark can lower a mark as well as raise it. Only send back questions where the missed steps are clearly on your page.</li>
               <li>Show this sheet and your scanned copy to a subject teacher if you can. A second pair of eyes is cheap.</li>
-              <li>Fees and dates change each year: check the board&rsquo;s current notice before paying.</li>
+              <li>Fees and deadlines change: check the current rules before paying.</li>
             </ul>
           </section>
 

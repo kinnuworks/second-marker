@@ -7,6 +7,8 @@ export type SheetData = {
   paper: string;
   isSample: boolean;
   fee: number;
+  currency: string;
+  board: string;
   totals: TotalsReport;
   rows: LedgerRow[];
   steps: Record<string, { id: string; text: string }[]>;

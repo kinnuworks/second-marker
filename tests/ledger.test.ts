@@ -51,6 +51,7 @@ describe("buildLedger", () => {
     const many = Array.from({ length: 12 }, (_, i) => String(40 + i));
     const scheme = {
       ...miniScheme,
+      rules: { board: "Test", currency: "₹", feePerQuestion: 100, maxQuestions: 10, canGoDown: true },
       questions: many.map((n, i) => ({
         number: n, section: "D" as const, maxMarks: 5, prompt: "", steps: [{ id: `${n}.1`, text: "", marks: 0.5 + (i % 3) }],
       })),
@@ -68,7 +69,7 @@ describe("buildLedger", () => {
 describe("summarise", () => {
   it("adds up fees and gains for the selected questions", () => {
     const rows = ledger();
-    expect(summarise(rows, 100)).toEqual({ selectedCount: 2, totalFee: 200, possibleGain: 1.5, overCap: false });
+    expect(summarise(rows, 100, 10)).toEqual({ selectedCount: 2, totalFee: 200, possibleGain: 1.5, overCap: false });
   });
 
   it("formats half marks", () => {

@@ -1,5 +1,7 @@
 import { z } from "zod";
-import scheme from "@/data/schemes/cbse-xii-maths-2025-26";
+import builtIn from "@/data/schemes/cbse-xii-maths-2025-26";
+import { SchemeZ } from "@/lib/schemeSchema";
+import type { Scheme } from "@/lib/types";
 import { readPage } from "@/lib/reader";
 import { MissingKeyError } from "@/lib/model";
 
@@ -10,6 +12,7 @@ const Body = z.object({
   image: z.string().min(100).max(8_000_000), // base64, ~6 MB cap
   mediaType: z.enum(["image/jpeg", "image/png"]),
   previousQuestion: z.string().max(8).nullable(),
+  scheme: SchemeZ.optional(),
 });
 
 export async function POST(request: Request) {
@@ -17,7 +20,7 @@ export async function POST(request: Request) {
   if (!parsed.success) return Response.json({ error: "That page couldn't be sent. Try a JPG or PNG under 6 MB." }, { status: 400 });
   try {
     const reading = await readPage({
-      scheme,
+      scheme: (parsed.data.scheme as Scheme | undefined) ?? builtIn,
       page: parsed.data.page,
       imageBase64: parsed.data.image,
       mediaType: parsed.data.mediaType,

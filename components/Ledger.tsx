@@ -1,12 +1,13 @@
 "use client";
 
-import { fmt, MAX_QUESTIONS_PER_SUBJECT, summarise } from "@/lib/ledger";
-import type { LedgerRow } from "@/lib/types";
+import { fmt, summarise } from "@/lib/ledger";
+import type { LedgerRow, RemarkRules } from "@/lib/types";
 import { Stamp } from "./Stamp";
 import styles from "./Ledger.module.css";
 
 type Props = {
   rows: LedgerRow[];
+  rules: RemarkRules;
   fee: number;
   onFeeChange: (fee: number) => void;
   onToggle: (number: string) => void;
@@ -15,8 +16,9 @@ type Props = {
   animate?: boolean;
 };
 
-export function Ledger({ rows, fee, onFeeChange, onToggle, onOpen, openNumber, animate }: Props) {
-  const s = summarise(rows, fee);
+export function Ledger({ rows, rules, fee, onFeeChange, onToggle, onOpen, openNumber, animate }: Props) {
+  const s = summarise(rows, fee, rules.maxQuestions);
+  const money = (n: number) => (rules.currency ? `${rules.currency}${n}` : n === 0 ? "Free" : String(n));
   const disputes = rows.filter((r) => r.stamp === "DISPUTE");
   const skips = rows.filter((r) => r.stamp === "SKIP");
 
@@ -25,14 +27,15 @@ export function Ledger({ rows, fee, onFeeChange, onToggle, onOpen, openNumber, a
       <header className={styles.head}>
         <h2 id="ledger-title">What to dispute</h2>
         <p className={styles.sub}>
-          Re-evaluation is paid per question, capped at {MAX_QUESTIONS_PER_SUBJECT} per subject, and marks can go
-          down as well as up. Tick only what you&rsquo;re sure of.
+          {rules.feePerQuestion > 0 ? "Re-marking is paid per question" : "Every re-mark request costs you something"}
+          {rules.maxQuestions ? `, capped at ${rules.maxQuestions} per subject` : ""}
+          {rules.canGoDown ? ", and marks can go down as well as up" : ""}. Tick only what you&rsquo;re sure of.
         </p>
       </header>
 
       {disputes.length === 0 ? (
         <p className={styles.none}>
-          <strong>The marking looks right.</strong> Nothing here is worth paying to re-evaluate. Save your money.
+          <strong>The marking looks right.</strong> Nothing here is worth sending back for a re-mark.
         </p>
       ) : (
         <ul className={styles.list}>
@@ -57,7 +60,7 @@ export function Ledger({ rows, fee, onFeeChange, onToggle, onOpen, openNumber, a
 
       <footer className={styles.foot}>
         <label className={styles.fee}>
-          Fee per question ₹
+          Fee per question {rules.currency}
           <input
             type="number"
             min={0}
@@ -74,14 +77,14 @@ export function Ledger({ rows, fee, onFeeChange, onToggle, onOpen, openNumber, a
           </div>
           <div>
             <dt>Fee</dt>
-            <dd className="num">₹{s.totalFee}</dd>
+            <dd className="num">{money(s.totalFee)}</dd>
           </div>
           <div>
             <dt>Possible gain</dt>
             <dd className="num hand">+{fmt(s.possibleGain)}</dd>
           </div>
         </dl>
-        {s.overCap && <p className={styles.warn}>That&rsquo;s more than {MAX_QUESTIONS_PER_SUBJECT}. The board won&rsquo;t accept it.</p>}
+        {s.overCap && <p className={styles.warn}>That&rsquo;s more than {rules.maxQuestions}. The board won&rsquo;t accept it.</p>}
       </footer>
     </section>
   );

@@ -16,10 +16,21 @@ export type SchemeQuestion = {
   note?: string; // e.g. "full marks for any correct alternative method"
 };
 
+/** How re-marks work for this paper: who runs them, what they cost, any limit. */
+export type RemarkRules = {
+  board: string; // e.g. "CBSE (India)", or "Your school or university"
+  currency: string; // symbol shown before fees
+  feePerQuestion: number; // 0 when re-marks are free (many university regrades)
+  maxQuestions?: number; // per subject, if the board sets one
+  canGoDown: boolean;
+};
+
 export type Scheme = {
   id: string;
   title: string;
   totalMarks: number;
+  rules?: RemarkRules;
+  custom?: boolean; // built from a rubric the student pasted
   sources: { label: string; url: string }[];
   questions: SchemeQuestion[];
 };

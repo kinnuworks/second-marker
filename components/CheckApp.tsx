@@ -3,12 +3,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import scheme from "@/data/schemes/cbse-xii-maths-2025-26";
+import builtIn from "@/data/schemes/cbse-xii-maths-2025-26";
 import { analyse } from "@/lib/analyse";
-import { DEFAULT_FEE_PER_QUESTION } from "@/lib/ledger";
+import { rulesFor } from "@/lib/ledger";
 import { preparePages, PageError, type PreparedPage } from "@/lib/pages";
 import { RunError, runCheck } from "@/lib/run";
-import type { CheckerResult, LedgerRow, PageReading } from "@/lib/types";
+import type { CheckerResult, LedgerRow, PageReading, Scheme } from "@/lib/types";
 import { saveSheet } from "@/lib/sheet";
 import { Ledger } from "./Ledger";
 import { QuestionView } from "./QuestionView";
@@ -19,7 +19,7 @@ import { Upload } from "./Upload";
 import styles from "./CheckApp.module.css";
 
 type Page = { page: number; src: string; width: number; height: number };
-type Book = { pages: Page[]; readings: PageReading[]; results: CheckerResult[]; isSample: boolean; sampleFromReader?: boolean };
+type Book = { scheme: Scheme; pages: Page[]; readings: PageReading[]; results: CheckerResult[]; isSample: boolean; sampleFromReader?: boolean };
 
 export function CheckApp() {
   const params = useSearchParams();
@@ -39,14 +39,14 @@ export function CheckApp() {
     let live = true;
     fetch("/sample/result.json")
       .then((r) => r.json())
-      .then((d) => live && setBook({ pages: d.pages, readings: d.readings, results: d.results, isSample: true, sampleFromReader: !String(d.about).includes("TEMPORARY") }))
+      .then((d) => live && setBook({ scheme: builtIn, pages: d.pages, readings: d.readings, results: d.results, isSample: true, sampleFromReader: !String(d.about).includes("TEMPORARY") }))
       .catch(() => live && setError("The sample couldn't be loaded. Refresh to try again."));
     return () => {
       live = false;
     };
   }, [wantsSample]);
 
-  const start = useCallback(async (files: File[]) => {
+  const start = useCallback(async (files: File[], scheme: Scheme) => {
     setError(null);
     let pages: PreparedPage[];
     try {
@@ -73,10 +73,10 @@ export function CheckApp() {
       const found = readings.flatMap((r) => r.questions).filter((q) => scheme.questions.some((s) => s.number === q.number));
       if (found.length === 0) {
         setPrepared(null);
-        setError("No questions from the supported paper were found. This looks like a different paper, or the pages are too unclear to read.");
+        setError("No questions from the chosen marking scheme were found. Check you picked the right paper, or the pages may be too unclear to read.");
         return;
       }
-      setBook({ pages: pages.map(({ page, url, width, height }) => ({ page, src: url, width, height })), readings, results, isSample: false });
+      setBook({ scheme, pages: pages.map(({ page, url, width, height }) => ({ page, src: url, width, height })), readings, results, isSample: false });
     } catch (e) {
       if (ctrl.signal.aborted) return;
       setPrepared(null);
@@ -132,9 +132,11 @@ export function CheckApp() {
 
 function Results({ book }: { book: Book }) {
   const router = useRouter();
+  const scheme = book.scheme;
+  const rules = rulesFor(scheme);
   const analysis = useMemo(() => analyse(scheme, book.readings, book.results), [book]);
   const [rows, setRows] = useState<LedgerRow[]>(analysis.ledger);
-  const [fee, setFee] = useState(DEFAULT_FEE_PER_QUESTION);
+  const [fee, setFee] = useState(rules.feePerQuestion);
   const firstDispute = analysis.ledger.find((r) => r.stamp === "DISPUTE")?.number;
   const [open, setOpen] = useState<string | null>(firstDispute ?? analysis.merged.find((m) => scheme.questions.find((q) => q.number === m.number)?.steps.length)?.number ?? null);
   const viewRef = useRef<HTMLDivElement>(null);
@@ -154,6 +156,8 @@ function Results({ book }: { book: Book }) {
       paper: scheme.title,
       isSample: book.isSample,
       fee,
+      currency: rules.currency,
+      board: rules.board,
       totals: analysis.totals,
       rows: rows.filter((r) => r.selected),
       steps: Object.fromEntries(
@@ -218,6 +222,7 @@ function Results({ book }: { book: Book }) {
         <aside className={styles.right}>
           <Ledger
             rows={rows}
+            rules={rules}
             fee={fee}
             onFeeChange={setFee}
             onToggle={(n) => setRows((rs) => rs.map((r) => (r.number === n ? { ...r, selected: !r.selected } : r)))}
@@ -229,7 +234,7 @@ function Results({ book }: { book: Book }) {
             Make my filing sheet
           </button>
           <p className={styles.small}>
-            Nothing is filed for you. The sheet lists what to apply for on the board&rsquo;s website. <Link href="/#how">How this works</Link>
+            Nothing is sent for you. The sheet lists what to ask for and why. <Link href="/#how">How this works</Link>
           </p>
         </aside>
       </div>

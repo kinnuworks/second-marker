@@ -34,7 +34,7 @@ export async function runCheck(
   for (const p of pages) {
     onProgress({ kind: "page", page: p.page, status: "reading", note: "Reading…" });
     try {
-      const r: PageReading = await post<PageReading>("/api/read-page", { page: p.page, image: p.base64, mediaType: "image/jpeg", previousQuestion: previous }, signal);
+      const r: PageReading = await post<PageReading>("/api/read-page", { page: p.page, image: p.base64, mediaType: "image/jpeg", previousQuestion: previous, scheme: scheme.custom ? scheme : undefined }, signal);
       readings.push(r);
       previous = r.questions.at(-1)?.number ?? previous;
       onProgress({ kind: "page", page: p.page, status: r.unreadable ? "failed" : "done", note: describe(r) });
@@ -56,7 +56,7 @@ export async function runCheck(
     for (let m = queue.shift(); m; m = queue.shift()) {
       onProgress({ kind: "question", number: m.number, status: "checking" });
       try {
-        results.push(await post<CheckerResult>("/api/check-question", { number: m.number, lines: m.lines }, signal));
+        results.push(await post<CheckerResult>("/api/check-question", { number: m.number, lines: m.lines, question: scheme.custom ? scheme.questions.find((q) => q.number === m.number) : undefined }, signal));
         onProgress({ kind: "question", number: m.number, status: "done" });
       } catch (e) {
         if (signal.aborted) throw e;

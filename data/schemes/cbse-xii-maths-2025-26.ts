@@ -15,6 +15,7 @@ const scheme: Scheme = {
   id: "cbse-xii-maths-2025-26",
   title: "CBSE Class XII Mathematics — Sample Question Paper 2025–26",
   totalMarks: 80,
+  rules: { board: "CBSE (India)", currency: "₹", feePerQuestion: 100, maxQuestions: 10, canGoDown: true },
   sources: [
     {
       label: "Sample Question Paper (official)",

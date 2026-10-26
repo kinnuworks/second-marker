@@ -1,8 +1,11 @@
-import type { Confidence, LedgerRow, QuestionCheck, Scheme } from "./types";
+import type { Confidence, LedgerRow, QuestionCheck, RemarkRules, Scheme } from "./types";
 import { type MergedQuestion, roundHalf } from "./totals";
 
-export const MAX_QUESTIONS_PER_SUBJECT = 10;
-export const DEFAULT_FEE_PER_QUESTION = 100;
+export const DEFAULT_RULES: RemarkRules = { board: "Your exam board", currency: "", feePerQuestion: 0, canGoDown: true };
+
+export function rulesFor(scheme: Scheme): RemarkRules {
+  return scheme.rules ?? DEFAULT_RULES;
+}
 
 const rank: Record<Confidence, number> = { high: 2, medium: 1, low: 0 };
 
@@ -112,18 +115,19 @@ export function buildLedger(
     rows.push({ ...base, possibleGain, confidence, stamp, reason, risk, selected: stamp === "DISPUTE" });
   }
 
-  return applyCap(rows);
+  return applyCap(rows, rulesFor(scheme).maxQuestions);
 }
 
-/** The board allows re-evaluation of at most 10 questions per subject. */
-function applyCap(rows: LedgerRow[]): LedgerRow[] {
+/** Some boards cap how many questions you can send back per subject (CBSE: 10). */
+function applyCap(rows: LedgerRow[], max?: number): LedgerRow[] {
+  if (!max) return rows;
   const disputes = rows
     .filter((r) => r.stamp === "DISPUTE")
     .sort((a, b) => b.possibleGain - a.possibleGain || rank[b.confidence] - rank[a.confidence]);
-  const keep = new Set(disputes.slice(0, MAX_QUESTIONS_PER_SUBJECT).map((r) => r.number));
+  const keep = new Set(disputes.slice(0, max).map((r) => r.number));
   return rows.map((r) =>
     r.stamp === "DISPUTE" && !keep.has(r.number)
-      ? { ...r, stamp: "SKIP", selected: false, reason: `${r.reason} Left out: the board allows only ${MAX_QUESTIONS_PER_SUBJECT} questions per subject.` }
+      ? { ...r, stamp: "SKIP", selected: false, reason: `${r.reason} Left out: the board allows only ${max} questions per subject.` }
       : r,
   );
 }
@@ -135,13 +139,13 @@ export type LedgerSummary = {
   overCap: boolean;
 };
 
-export function summarise(rows: LedgerRow[], feePerQuestion = DEFAULT_FEE_PER_QUESTION): LedgerSummary {
+export function summarise(rows: LedgerRow[], feePerQuestion = 0, maxQuestions?: number): LedgerSummary {
   const selected = rows.filter((r) => r.selected);
   return {
     selectedCount: selected.length,
     totalFee: selected.length * feePerQuestion,
     possibleGain: roundHalf(selected.reduce((s, r) => s + r.possibleGain, 0)),
-    overCap: selected.length > MAX_QUESTIONS_PER_SUBJECT,
+    overCap: maxQuestions !== undefined && selected.length > maxQuestions,
   };
 }
 

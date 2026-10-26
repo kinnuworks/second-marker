@@ -66,7 +66,7 @@ export function QuestionView({
         </figure>
 
         <section className={styles.scheme}>
-          <h3>Official marking scheme</h3>
+          <h3>Marking scheme</h3>
           {question.steps.length === 0 ? (
             <p className={styles.empty}>One-mark objective question. Correct answer: {question.answer}</p>
           ) : (
@@ -100,7 +100,7 @@ export function QuestionView({
           {check?.summary && <p className={`${styles.summary} hand`}>{check.summary}</p>}
           {missed.length > 0 && row && (
             <p className={styles.cite}>
-              To cite in your application: step{missed.length > 1 ? "s" : ""} {missed.map((m) => m.id).join(", ")} of the official marking scheme.
+              To cite in your request: step{missed.length > 1 ? "s" : ""} {missed.map((m) => m.id).join(", ")} of the marking scheme.
             </p>
           )}
           {question.note && <p className={styles.note2}>{question.note}</p>}
