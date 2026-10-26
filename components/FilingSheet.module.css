@@ -33,3 +33,15 @@
   .sheet { box-shadow: none; max-width: none; padding: 0; border-radius: 0; }
   @page { size: A4; margin: 16mm; }
 }
+
+.hint { margin: 0 0 10px; font-size: 14px; color: var(--ink-soft); }
+.letter {
+  margin: 0; padding: 16px 18px; white-space: pre-wrap; word-break: break-word; font-family: inherit; font-size: 15px; line-height: 1.5;
+  background: #fff; border: 1px solid var(--desk-deep); border-radius: 6px;
+}
+.copyRow { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+.copyRow .hint { margin: 0; }
+.fallback { width: 100%; margin-top: 4px; padding: 10px; font: inherit; font-size: 14px; border: 1px solid var(--desk-deep); border-radius: 6px; }
+@media print {
+  .letter { border: 1px solid #999; break-inside: auto; }
+}

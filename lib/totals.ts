@@ -8,6 +8,7 @@ export type MergedQuestion = {
   legible: boolean;
   parts: QuestionReading[];
   coverDisagrees?: number; // what the margin seemed to say, when the cover table differs
+  coverChecked?: boolean; // a cover table row with a mark matched this question
 };
 
 export type TotalsIssue =
@@ -58,6 +59,7 @@ export function mergeReadings(readings: PageReading[]): MergedQuestion[] {
   for (const q of byNumber.values()) {
     const row = table.find((r) => r.label === q.number || r.label === q.number.replace(/[AB]$/, ""));
     if (row && row.mark !== null) {
+      q.coverChecked = true;
       if (q.examinerMark !== null && Math.abs(row.mark - q.examinerMark) > 1e-9) q.coverDisagrees = q.examinerMark;
       q.examinerMark = row.mark;
     }

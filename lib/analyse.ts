@@ -1,4 +1,5 @@
 import { allocate } from "./allocate";
+import { applyOverrides, type Overrides } from "./overrides";
 import { buildLedger } from "./ledger";
 import { checkTotals, mergeReadings, type MergedQuestion, type TotalsReport } from "./totals";
 import type { CheckerResult, LedgerRow, PageReading, QuestionCheck, Scheme } from "./types";
@@ -11,8 +12,12 @@ export type Analysis = {
   unknownQuestions: string[]; // numbers on the page that aren't in this paper
 };
 
-/** Everything after the reader and checker: plain code, no AI. */
-export function analyse(scheme: Scheme, readings: PageReading[], results: CheckerResult[]): Analysis {
+/**
+ * Everything after the reader and checker: plain code, no AI.
+ * `overrides` are the student's own what-if edits, applied to a copy of the results.
+ */
+export function analyse(scheme: Scheme, readings: PageReading[], rawResults: CheckerResult[], overrides?: Overrides): Analysis {
+  const results = overrides ? applyOverrides(rawResults, overrides) : rawResults;
   const merged = mergeReadings(readings);
   const totals = checkTotals(readings, scheme);
   const checks: QuestionCheck[] = [];

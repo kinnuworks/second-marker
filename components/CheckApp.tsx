@@ -10,6 +10,8 @@ import { preparePages, PageError, type PreparedPage } from "@/lib/pages";
 import { RunError, runCheck } from "@/lib/run";
 import type { CheckerResult, LedgerRow, PageReading, RemarkRules, Scheme } from "@/lib/types";
 import { saveSheet } from "@/lib/sheet";
+import { countOverrides, setOverride, type Overrides, type StepOverride } from "@/lib/overrides";
+import type { TotalsReport } from "@/lib/totals";
 import { Ledger } from "./Ledger";
 import { QuestionView } from "./QuestionView";
 import { ReadingProgress, type PageState } from "./ReadingProgress";
@@ -134,8 +136,28 @@ function Results({ book }: { book: Book }) {
   const router = useRouter();
   const scheme = book.scheme;
   const rules = rulesFor(scheme);
-  const analysis = useMemo(() => analyse(scheme, book.readings, book.results), [book]);
-  const [rows, setRows] = useState<LedgerRow[]>(analysis.ledger);
+  // What-if edits live here only. book.results is never changed.
+  const [overrides, setOverrides] = useState<Overrides>({});
+  const analysis = useMemo(() => analyse(scheme, book.readings, book.results, overrides), [scheme, book, overrides]);
+  // Ticks the student changed by hand; everything else follows the stamps.
+  const [picks, setPicks] = useState<Record<string, boolean>>({});
+  const rows = useMemo<LedgerRow[]>(
+    () => analysis.ledger.map((r) => (r.number in picks ? { ...r, selected: picks[r.number] } : r)),
+    [analysis, picks],
+  );
+  const edits = countOverrides(overrides);
+  const editStep = (number: string, stepId: string, value: StepOverride | null) => {
+    setOverrides((o) => setOverride(o, number, stepId, value));
+    setPicks((p) => {
+      const next = { ...p };
+      delete next[number];
+      return next;
+    });
+  };
+  const resetEdits = () => {
+    setOverrides({});
+    setPicks({});
+  };
   const [fee, setFee] = useState(rules.feePerQuestion);
   const firstDispute = analysis.ledger.find((r) => r.stamp === "DISPUTE")?.number;
   const [open, setOpen] = useState<string | null>(firstDispute ?? analysis.merged.find((m) => scheme.questions.find((q) => q.number === m.number)?.steps.length)?.number ?? null);
@@ -165,7 +187,11 @@ function Results({ book }: { book: Book }) {
           c.number,
           c.steps
             .filter((s) => s.verdict === "written_not_credited")
-            .map((s) => ({ id: s.id, text: scheme.questions.find((q) => q.number === c.number)?.steps.find((x) => x.id === s.id)?.text ?? "" })),
+            .map((s) => ({
+              id: s.id,
+              text: scheme.questions.find((q) => q.number === c.number)?.steps.find((x) => x.id === s.id)?.text ?? "",
+              evidence: s.evidence,
+            })),
         ]),
       ),
     });
@@ -181,6 +207,15 @@ function Results({ book }: { book: Book }) {
         </p>
       )}
       <Verdict rows={rows} rules={rules} recount={analysis.totals.recommendVerification} />
+      {edits > 0 && (
+        <p className={styles.edited} role="status">
+          <span className="pill">Edited by you</span> You changed {edits} step{edits === 1 ? "" : "s"}. The verdict and the list use your edits. Your saved results are unchanged.{" "}
+          <button type="button" className={styles.linkBtn} onClick={resetEdits}>
+            Reset my edits
+          </button>
+        </p>
+      )}
+      <TrustPanel isSample={book.isSample} totals={analysis.totals} />
       <TotalsBanner totals={analysis.totals} />
       {unreadablePages.length > 0 && (
         <p className={styles.warn} role="status">
@@ -214,6 +249,9 @@ function Results({ book }: { book: Book }) {
               check={analysis.checks.find((c) => c.number === sq.number)}
               row={rows.find((r) => r.number === sq.number)}
               pages={book.pages}
+              overrides={overrides[sq.number]}
+              onOverride={(stepId, value) => editStep(sq.number, stepId, value)}
+              onReset={edits > 0 ? resetEdits : undefined}
             />
           ) : (
             <p className={styles.loading}>Pick a question to see it next to the scheme.</p>
@@ -226,7 +264,7 @@ function Results({ book }: { book: Book }) {
             rules={rules}
             fee={fee}
             onFeeChange={setFee}
-            onToggle={(n) => setRows((rs) => rs.map((r) => (r.number === n ? { ...r, selected: !r.selected } : r)))}
+            onToggle={(n) => setPicks((p) => ({ ...p, [n]: !rows.find((r) => r.number === n)?.selected }))}
             onOpen={openQuestion}
             openNumber={open}
             animate
@@ -267,5 +305,36 @@ function Verdict({ rows, rules, recount }: { rows: LedgerRow[]; rules: RemarkRul
         Leave {rows.length - disputes.length} question{rows.length - disputes.length === 1 ? "" : "s"} alone. These are signals from your own page, not a promise: examiners decide, and a re-mark can go either way.
       </p>
     </section>
+  );
+}
+
+/** What the results rest on, said plainly. */
+function TrustPanel({ isSample, totals }: { isSample: boolean; totals: TotalsReport }) {
+  const postings = totals.issues.filter((i) => i.kind === "posting_mismatch");
+  return (
+    <details className={styles.trust}>
+      <summary>How far to trust this</summary>
+      <ul className={styles.trustList}>
+        {isSample ? (
+          <>
+            <li>
+              On this sample answer book, the reader and checker matched the answer key on 36 of 36 checks (<code>eval/sample-key.json</code>).
+            </li>
+            <li>Tested on one paper so far: CBSE Class 12 Maths 2025 to 26.</li>
+          </>
+        ) : (
+          <li>
+            There is no answer key for your paper, so these results have not been measured against one. Check every quoted line against your page before you rely on it.
+          </li>
+        )}
+        {postings.map((p) =>
+          p.kind === "posting_mismatch" ? (
+            <li key={p.number}>
+              Q{p.number}: margin read as {fmt(p.inside)}, cover table says {fmt(p.cover)}: using {fmt(p.cover)}.
+            </li>
+          ) : null,
+        )}
+      </ul>
+    </details>
   );
 }

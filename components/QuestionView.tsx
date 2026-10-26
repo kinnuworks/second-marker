@@ -1,5 +1,6 @@
 import type { MergedQuestion } from "@/lib/totals";
 import { fmt } from "@/lib/ledger";
+import type { StepOverride } from "@/lib/overrides";
 import type { LedgerRow, QuestionCheck, SchemeQuestion } from "@/lib/types";
 import { Stamp } from "./Stamp";
 import styles from "./QuestionView.module.css";
@@ -19,12 +20,18 @@ export function QuestionView({
   check,
   row,
   pages,
+  overrides,
+  onOverride,
+  onReset,
 }: {
   question: SchemeQuestion;
   merged: MergedQuestion;
   check?: QuestionCheck;
   row?: LedgerRow;
   pages: Page[];
+  overrides?: Record<string, StepOverride>;
+  onOverride?: (stepId: string, value: StepOverride | null) => void;
+  onReset?: () => void;
 }) {
   const missed = check?.steps.filter((s) => s.verdict === "written_not_credited") ?? [];
 
@@ -63,6 +70,11 @@ export function QuestionView({
           <p className={styles.awarded}>
             Examiner gave <span className="hand" style={{ color: "var(--red)", fontSize: 24 }}>{merged.examinerMark === null ? "?" : fmt(merged.examinerMark)}</span> of {question.maxMarks}
           </p>
+          {merged.examinerMark !== null && (
+            <p className={styles.source}>
+              {merged.coverChecked ? "Mark cross-checked with the cover table" : "Mark read from the margin only"}
+            </p>
+          )}
         </figure>
 
         <section className={styles.scheme}>
@@ -74,6 +86,8 @@ export function QuestionView({
               {question.steps.map((s) => {
                 const v = check?.steps.find((x) => x.id === s.id);
                 const meta = v ? VERDICT[v.verdict] : null;
+                const edited = overrides?.[s.id];
+                const seenWritten = v?.verdict === "credited" || v?.verdict === "written_not_credited";
                 return (
                   <li key={s.id} className={`${styles.step} ${meta ? styles[meta.cls] : ""}`}>
                     <span className={`${styles.marks} num`}>{fmt(s.marks)}</span>
@@ -91,6 +105,26 @@ export function QuestionView({
                           {v && v.confidence !== "high" && <span className={styles.conf}> · {v.confidence} confidence</span>}
                         </span>
                       )}
+                      {check && onOverride && (
+                        <span className={styles.edit}>
+                          {edited ? (
+                            <>
+                              <span className="pill">Edited by you</span>
+                              <button type="button" className={styles.editBtn} onClick={() => onOverride(s.id, null)}>
+                                Undo
+                              </button>
+                            </>
+                          ) : (
+                            <button
+                              type="button"
+                              className={styles.editBtn}
+                              onClick={() => onOverride(s.id, seenWritten ? "not_written" : "written")}
+                            >
+                              {seenWritten ? "I don't see this on my page" : "I think this was written"}
+                            </button>
+                          )}
+                        </span>
+                      )}
                     </div>
                   </li>
                 );
@@ -104,6 +138,11 @@ export function QuestionView({
             </p>
           )}
           {question.note && <p className={styles.note2}>{question.note}</p>}
+          {onReset && Object.keys(overrides ?? {}).length > 0 && (
+            <button type="button" className={`${styles.editBtn} ${styles.resetBtn}`} onClick={onReset}>
+              Reset my edits
+            </button>
+          )}
         </section>
       </div>
     </article>

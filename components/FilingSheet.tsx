@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { fmt } from "@/lib/ledger";
+import { draftRequest } from "@/lib/request";
 import { loadSheet, type SheetData } from "@/lib/sheet";
 import { SiteHeader } from "./SiteHeader";
 import { Stamp } from "./Stamp";
@@ -109,8 +110,10 @@ export function FilingSheet() {
             )}
           </section>
 
+          <RequestDraft data={data} />
+
           <section className={styles.block}>
-            <h2><span className={styles.n}>3</span> Before you pay</h2>
+            <h2><span className={styles.n}>4</span> Before you pay</h2>
             <ul className={styles.list}>
               <li>Apply through {data.board}&rsquo;s re-mark or review process, inside its dates.</li>
               <li>A re-mark can lower a mark as well as raise it. Only send back questions where the missed steps are clearly on your page.</li>
@@ -125,5 +128,50 @@ export function FilingSheet() {
         </article>
       </main>
     </div>
+  );
+}
+
+/** The request as plain text, built from the sheet. Fill in the bracketed parts. */
+function RequestDraft({ data }: { data: SheetData }) {
+  const text = draftRequest(data);
+  const [state, setState] = useState<"idle" | "copied" | "manual">("idle");
+  const area = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (state === "manual") {
+      area.current?.focus();
+      area.current?.select();
+    }
+  }, [state]);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setState("copied");
+    } catch {
+      setState("manual");
+    }
+  };
+
+  return (
+    <section className={styles.block}>
+      <h2><span className={styles.n}>3</span> Your request, ready to send</h2>
+      <p className={styles.hint}>
+        Fill in the parts in square brackets. Read it through and change anything that does not match your page.
+      </p>
+      <pre className={styles.letter}>{text}</pre>
+      <div className={`${styles.copyRow} no-print`}>
+        <button type="button" className="btn btn-outline" onClick={copy}>
+          {state === "copied" ? "Copied" : "Copy the request"}
+        </button>
+        {state === "copied" && <span className={styles.hint} role="status">Copied to your clipboard.</span>}
+      </div>
+      {state === "manual" && (
+        <div className="no-print">
+          <p className={styles.hint} role="status">Your browser blocked copying. The text below is selected: press Ctrl+C or Cmd+C.</p>
+          <textarea ref={area} className={styles.fallback} readOnly value={text} rows={12} aria-label="Your request" />
+        </div>
+      )}
+    </section>
   );
 }

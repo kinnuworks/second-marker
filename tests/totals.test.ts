@@ -61,6 +61,8 @@ describe("cover marks table", () => {
     pages[0].coverMarks = [{ label: "27", mark: 1.5 }];
     const q27 = mergeReadings(pages).find((q) => q.number === "27")!;
     expect(q27.examinerMark).toBe(1.5);
+    expect(q27.coverChecked).toBe(true);
+    expect(mergeReadings(pages).find((q) => q.number === "24")!.coverChecked).toBeUndefined();
     expect(checkTotals(pages, miniScheme).issues).toContainEqual({ kind: "posting_mismatch", number: "27", inside: 2, cover: 1.5 });
   });
 });

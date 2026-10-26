@@ -11,8 +11,11 @@ export type SheetData = {
   board: string;
   totals: TotalsReport;
   rows: LedgerRow[];
-  steps: Record<string, { id: string; text: string }[]>;
+  steps: Record<string, SheetStep[]>;
 };
+
+/** A missed scheme step, with the line from the student's page when the checker quoted one. */
+export type SheetStep = { id: string; text: string; evidence?: string | null };
 
 const KEY = "second-marker:sheet";
 
