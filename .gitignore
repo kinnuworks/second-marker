@@ -1,0 +1,19 @@
+/devpost/learner-profile.md
+.env
+.env.*
+!.env.example
+node_modules/
+.DS_Store
+
+# dependencies and build output
+/.next/
+/out/
+/coverage
+*.tsbuildinfo
+next-env.d.ts
+.vercel
+*.pem
+npm-debug.log*
+
+# official source PDFs and renders (linked from the scheme file instead)
+/reference/

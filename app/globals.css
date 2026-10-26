@@ -1,0 +1,110 @@
+/* Second Marker: the answer book is the interface.
+   Paper, ruled lines, the examiner's red ink, and the second marker's green. */
+
+:root {
+  color-scheme: light;
+  --desk: #e8eef2;
+  --desk-deep: #d9e2e8;
+  --paper: #fdfdf8;
+  --rule: #d4e5ef;
+  --margin-rule: #e8a5a5;
+  --ink: #1b2440;
+  --ink-soft: #4a5570;
+  --muted: #6b7489;
+  --red: #c8102e;
+  --red-wash: #fbeaec;
+  --green: #0b6e4f;
+  --green-wash: #e5f2ec;
+  --skip: #4a6380;
+  --skip-wash: #e9eef4;
+  --amber: #a15c00;
+  --amber-wash: #fbf1e1;
+  --line: 28px; /* ruled line height */
+  --radius: 6px;
+  --shadow: 0 1px 0 rgba(27, 36, 64, 0.06), 0 8px 24px -12px rgba(27, 36, 64, 0.25);
+  --font-sans: var(--font-body), system-ui, sans-serif;
+  --font-hand: var(--font-ink), "Segoe Print", cursive;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  background: var(--desk);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: var(--green); text-underline-offset: 3px; }
+a:hover { color: var(--ink); }
+
+h1, h2, h3 { line-height: 1.15; margin: 0; letter-spacing: -0.01em; }
+
+button { font: inherit; }
+
+:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; border-radius: 4px; }
+
+.num { font-variant-numeric: tabular-nums; }
+
+.hand { font-family: var(--font-hand); }
+
+/* A sheet of answer-book paper. */
+.sheet {
+  position: relative;
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(90deg, transparent 47px, var(--margin-rule) 47px, var(--margin-rule) 49px, transparent 49px),
+    repeating-linear-gradient(180deg, transparent 0, transparent calc(var(--line) - 1px), var(--rule) calc(var(--line) - 1px), var(--rule) var(--line));
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--line) 24px var(--line) 64px;
+}
+
+.sheet--plain { background-image: none; padding: 24px; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 48px; padding: 0 20px;
+  border-radius: 999px; border: 2px solid var(--ink);
+  background: var(--ink); color: var(--paper);
+  font-weight: 600; text-decoration: none; cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease;
+}
+.btn:hover { background: #2a365c; color: var(--paper); }
+.btn:active { transform: translateY(1px); }
+.btn--ghost { background: transparent; color: var(--ink); }
+.btn--ghost:hover { background: rgba(27, 36, 64, 0.06); color: var(--ink); }
+.btn--green { background: var(--green); border-color: var(--green); }
+.btn--green:hover { background: #095c42; }
+.btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+
+.tag {
+  display: inline-block; padding: 1px 8px; border-radius: 999px;
+  font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
+  background: var(--skip-wash); color: var(--skip);
+}
+.tag--green { background: var(--green-wash); color: var(--green); }
+.tag--red { background: var(--red-wash); color: var(--red); }
+.tag--amber { background: var(--amber-wash); color: var(--amber); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+@media print {
+  body { background: #fff; }
+  .no-print { display: none !important; }
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
