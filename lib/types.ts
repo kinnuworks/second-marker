@@ -40,6 +40,7 @@ export type PageReading = {
   page: number;
   isCover: boolean;
   coverTotal: number | null; // total written on the cover, if this is the cover
+  coverMarks?: { label: string; mark: number | null }[]; // the cover's per-question marks table
   questions: QuestionReading[];
   unreadable?: boolean;
 };

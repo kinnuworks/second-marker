@@ -3,8 +3,9 @@
 // Run: npm run sample
 import { readdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import scheme from "../data/schemes/cbse-xii-maths-2025-26";
-import { runPipeline } from "./pipeline";
+import schemeModule from "../data/schemes/cbse-xii-maths-2025-26";
+const scheme = ((schemeModule as unknown as { default?: typeof schemeModule }).default ?? schemeModule);
+import { runPipeline } from "./pipeline.mts";
 
 const dir = "public/sample/pages";
 const files = readdirSync(dir).filter((f) => /\.(jpe?g)$/.test(f)).sort();

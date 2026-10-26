@@ -8,6 +8,9 @@ import { normaliseNumber } from "./totals";
 const PageSchema = z.object({
   isCover: z.boolean().describe("True if this is the answer book's cover or marks summary page."),
   coverTotal: z.number().nullable().describe("Grand total written by the examiner on the cover, or null."),
+  coverMarks: z
+    .array(z.object({ label: z.string(), mark: z.number().nullable() }))
+    .describe("Cover page only: each row of the examiner's marks table, as written (label like \"24\" or \"Section A\"). Empty on other pages."),
   questions: z.array(
     z.object({
       number: z.string().describe('Question number as the paper numbers it, e.g. "27", "28A". Use the previous question number if the page continues an answer without a new number.'),
@@ -24,19 +27,28 @@ export function readerPrompt(scheme: Scheme, page: number, previousQuestion: str
   const list = scheme.questions.map((q) => `${q.number} (${q.maxMarks} mark${q.maxMarks === 1 ? "" : "s"})`).join(", ");
   return [
     `This is page ${page} of a scanned, examiner-marked answer book for "${scheme.title}".`,
-    `Questions in this paper: ${list}. Where the paper offers a choice, the student answers one of "A" or "B"; label it by what they answered if you can tell, otherwise use the plain number.`,
+    `Questions in this paper: ${list}.`,
+    `Some questions offer a choice between A and B. Label the answer with the letter whose question it actually answers, judged from the working:\n${choices(scheme)}`,
     previousQuestion
       ? `The previous page ended inside or after question ${previousQuestion}. If this page starts without a new question number, that working belongs to question ${previousQuestion}.`
       : "",
     "Read it the way a careful second examiner would:",
     "- The student writes in pen. The examiner marks in red ink: ticks, crosses, and the mark for each question, usually written and often circled in the margin or at the end of the answer.",
     "- Transcribe the student's working exactly as written, one line per line, including mistakes. Do not correct, complete or tidy the maths.",
-    "- Read the examiner's mark for each question. Write ½ as 0.5. If no mark is written, use null. If a mark is there but you can't read it with confidence, use null and set legible to false.",
+    "- Read the examiner's mark for each question. Half marks are common: examiners write them as a whole number followed by a small ½, often as a tiny stacked 1 over 2 squeezed beside the number (\"1½\" means 1.5, not 2 and not 1). Look closely at anything small next to the number before deciding. Write ½ as 0.5.",
+    "- If no mark is written, use null. If a mark is there but you can't read it with confidence, use null and set legible to false.",
     "- Never guess a mark or invent working that isn't on the page.",
     "- One-mark objective questions (Section A) are usually marked with a tick (1 mark) or a cross (0 marks), with a circled subtotal for the group. Report each objective question with 1 for a tick and 0 for a cross, and ignore the group subtotal.",
-    "- If this is the cover page, report only the grand total the examiner wrote, and list no questions: the marks table on the cover is a copy of the marks inside.",
+    "- If this is the cover page, report the grand total and every row of the examiner's marks table in coverMarks, and list no questions.",
   ]
     .filter(Boolean)
+    .join("\n");
+}
+
+function choices(scheme: Scheme): string {
+  return scheme.questions
+    .filter((q) => /[AB]$/.test(q.number))
+    .map((q) => `- ${q.number}: ${q.prompt}`)
     .join("\n");
 }
 
@@ -70,6 +82,7 @@ export async function readPage(opts: {
     page: opts.page,
     isCover: out.isCover,
     coverTotal: out.coverTotal,
+    coverMarks: out.isCover ? out.coverMarks.map((r) => ({ label: normaliseNumber(r.label), mark: r.mark })) : undefined,
     questions: out.questions.map((q) => ({
       number: normaliseNumber(q.number),
       page: opts.page,

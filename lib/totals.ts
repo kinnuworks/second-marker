@@ -7,6 +7,7 @@ export type MergedQuestion = {
   examinerMark: number | null;
   legible: boolean;
   parts: QuestionReading[];
+  coverDisagrees?: number; // what the margin seemed to say, when the cover table differs
 };
 
 export type TotalsIssue =
@@ -14,7 +15,8 @@ export type TotalsIssue =
   | { kind: "over_max"; number: string; mark: number; max: number }
   | { kind: "unmarked"; number: string }
   | { kind: "unreadable_mark"; number: string }
-  | { kind: "both_choices"; numbers: [string, string] };
+  | { kind: "both_choices"; numbers: [string, string] }
+  | { kind: "posting_mismatch"; number: string; inside: number; cover: number };
 
 export type TotalsReport = {
   added: number; // sum of the marks we could read
@@ -50,6 +52,16 @@ export function mergeReadings(readings: PageReading[]): MergedQuestion[] {
       if (q.examinerMark !== null) existing.examinerMark = q.examinerMark;
     }
   }
+  // The cover's marks table repeats each question's mark. Where the margin and
+  // the table disagree, the table is usually the clearer writing: use it and say so.
+  const table = pages.find((p) => p.isCover)?.coverMarks ?? [];
+  for (const q of byNumber.values()) {
+    const row = table.find((r) => r.label === q.number || r.label === q.number.replace(/[AB]$/, ""));
+    if (row && row.mark !== null) {
+      if (q.examinerMark !== null && Math.abs(row.mark - q.examinerMark) > 1e-9) q.coverDisagrees = q.examinerMark;
+      q.examinerMark = row.mark;
+    }
+  }
   return [...byNumber.values()].sort(compareNumbers);
 }
 
@@ -61,6 +73,9 @@ export function checkTotals(readings: PageReading[], scheme: Scheme): TotalsRepo
 
   for (const q of merged) {
     const max = maxMarksFor(scheme, q.number);
+    if (q.coverDisagrees !== undefined && q.examinerMark !== null) {
+      issues.push({ kind: "posting_mismatch", number: q.number, inside: q.coverDisagrees, cover: q.examinerMark });
+    }
     if (q.examinerMark === null) {
       issues.push(q.legible ? { kind: "unmarked", number: q.number } : { kind: "unreadable_mark", number: q.number });
       continue;

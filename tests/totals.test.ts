@@ -54,3 +54,13 @@ describe("mergeReadings", () => {
     expect(normaliseNumber("28 a")).toBe("28A");
   });
 });
+
+describe("cover marks table", () => {
+  it("uses the cover table when the margin reading disagrees, and flags it", () => {
+    const pages = readings({ cover: 3.5, marks: { "27": 2 } });
+    pages[0].coverMarks = [{ label: "27", mark: 1.5 }];
+    const q27 = mergeReadings(pages).find((q) => q.number === "27")!;
+    expect(q27.examinerMark).toBe(1.5);
+    expect(checkTotals(pages, miniScheme).issues).toContainEqual({ kind: "posting_mismatch", number: "27", inside: 2, cover: 1.5 });
+  });
+});

@@ -44,6 +44,7 @@ export function TotalsBanner({ totals }: { totals: TotalsReport }) {
                 {i.kind === "unreadable_mark" && <>The mark for question {i.number} couldn&rsquo;t be read. Check it on the page.</>}
                 {i.kind === "over_max" && <>Question {i.number} got {fmt(i.mark)}, more than its {i.max} marks.</>}
                 {i.kind === "both_choices" && <>Both {i.numbers[0]} and {i.numbers[1]} were answered; only one counts.</>}
+                {i.kind === "posting_mismatch" && <>Question {i.number}: the margin looks like {fmt(i.inside)} but the cover table says {fmt(i.cover)}. Using {fmt(i.cover)}; check this mark on the page.</>}
               </li>
             ))}
           </ul>

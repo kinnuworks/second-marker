@@ -3,10 +3,11 @@
 // Run: npm run eval
 import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
-import scheme from "../data/schemes/cbse-xii-maths-2025-26";
+import schemeModule from "../data/schemes/cbse-xii-maths-2025-26";
+const scheme = ((schemeModule as unknown as { default?: typeof schemeModule }).default ?? schemeModule);
 import { analyse } from "../lib/analyse";
 import { mergeReadings } from "../lib/totals";
-import { runPipeline } from "./pipeline";
+import { runPipeline } from "./pipeline.mts";
 
 const dir = "public/sample/pages";
 const key = JSON.parse(readFileSync("eval/sample-key.json", "utf8"));
