@@ -9,7 +9,7 @@ Build mode: fast (the learner asked the agent to build; hands-on checkpoints sti
 
 ## Slices
 
-- [ ] **1. A real ledger from the official marking scheme**
+- [x] **1. A real ledger from the official marking scheme**
   Becomes usable: A running site whose results page shows a DISPUTE/SKIP ledger, totals check and fee total, computed by tested code from the official Class 12 Maths scheme and a hand-made example answer book.
   Why now: The decision is the kernel. Building it first, as plain tested code, means everything later only has to feed it correct readings.
   PRD ref: `prd.md > Totals check`, `prd.md > The dispute ledger`
@@ -71,3 +71,5 @@ Reflection:
 Activity mode:
 
 ## Revisions
+- Next.js 16 instead of 15 — the current release when the build started; Cache Components left off because the app is mostly client-side.
+- The checker reports which scheme steps are on the page, and plain code (`lib/allocate.ts`) decides which of them the examiner's single mark already covers — examiners write one mark per question, not one per step, so "credited" can't be read off the page.

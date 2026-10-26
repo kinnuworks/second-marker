@@ -1,0 +1,353 @@
+{
+  "about": "TEMPORARY stand-in while building",
+  "schemeId": "cbse-xii-maths-2025-26",
+  "pages": [
+    {
+      "page": 1,
+      "src": "/sample/pages/page-1.jpg",
+      "width": 1240,
+      "height": 1754
+    },
+    {
+      "page": 2,
+      "src": "/sample/pages/page-2.jpg",
+      "width": 1240,
+      "height": 1754
+    },
+    {
+      "page": 3,
+      "src": "/sample/pages/page-3.jpg",
+      "width": 1240,
+      "height": 1754
+    },
+    {
+      "page": 4,
+      "src": "/sample/pages/page-4.jpg",
+      "width": 1240,
+      "height": 1754
+    },
+    {
+      "page": 5,
+      "src": "/sample/pages/page-5.jpg",
+      "width": 1240,
+      "height": 1754
+    }
+  ],
+  "readings": [
+    {
+      "page": 1,
+      "isCover": true,
+      "coverTotal": 12,
+      "questions": []
+    },
+    {
+      "page": 2,
+      "isCover": false,
+      "coverTotal": null,
+      "questions": [
+        {
+          "number": "1",
+          "page": 2,
+          "top": 0.07,
+          "bottom": 0.1,
+          "lines": [
+            "(B) sin^-1(2x)"
+          ],
+          "examinerMark": 1,
+          "legible": true
+        },
+        {
+          "number": "2",
+          "page": 2,
+          "top": 0.1,
+          "bottom": 0.13,
+          "lines": [
+            "(A) m = q = 3, n = p = 4"
+          ],
+          "examinerMark": 1,
+          "legible": true
+        },
+        {
+          "number": "3",
+          "page": 2,
+          "top": 0.13,
+          "bottom": 0.155,
+          "lines": [
+            "(C) -1"
+          ],
+          "examinerMark": 0,
+          "legible": true
+        },
+        {
+          "number": "4",
+          "page": 2,
+          "top": 0.155,
+          "bottom": 0.18,
+          "lines": [
+            "(C) 3I"
+          ],
+          "examinerMark": 1,
+          "legible": true
+        },
+        {
+          "number": "5",
+          "page": 2,
+          "top": 0.18,
+          "bottom": 0.21,
+          "lines": [
+            "(B) diag(1/3, 1/2, 1/5)"
+          ],
+          "examinerMark": 1,
+          "legible": true
+        },
+        {
+          "number": "24",
+          "page": 2,
+          "top": 0.255,
+          "bottom": 0.48,
+          "lines": [
+            "f(x+y) = f(x) f(y)",
+            "put x = 0, y = 5 : f(5) = f(0) f(5) ⇒ f(0) = 1",
+            "f'(5) = lim h→0 [f(5+h) − f(5)]/h",
+            "= lim h→0 [f(5) f(h) − f(5)]/h",
+            "= lim h→0 [2 f(h) − 2]/h",
+            "= 2 lim h→0 [f(h) − f(0)]/h",
+            "= 2 f'(0) = 2 × 3",
+            "∴ f'(5) = 6"
+          ],
+          "examinerMark": 1.5,
+          "legible": true
+        }
+      ]
+    },
+    {
+      "page": 3,
+      "isCover": false,
+      "coverTotal": null,
+      "questions": [
+        {
+          "number": "25",
+          "page": 3,
+          "top": 0.07,
+          "bottom": 0.27,
+          "lines": [
+            "OP is the median, so P is mid-point of AB",
+            "OP = ½(OA + OB) = ½(4i + 4k) = 2i + 2k",
+            "Area of ||gm = |OA × OP|",
+            "|i j k| |1 1 1| |2 0 2|",
+            "= i(2 − 0) − j(2 − 2) + k(0 − 2) = 2i − 2k",
+            "Area = √(4 + 4) = 2√2 sq. units"
+          ],
+          "examinerMark": 2,
+          "legible": true
+        },
+        {
+          "number": "26A",
+          "page": 3,
+          "top": 0.33,
+          "bottom": 0.48,
+          "lines": [
+            "x^y = e^(x − y). Taking log: y log x = (x − y) log e",
+            "y log x + y = x ⇒ y = x/(1 + log x)",
+            "dy/dx = [(1 + log x)·1 − x·(1/x)]/(1 + log x)^2",
+            "= log x/(1 + log x)^2 = log x/(log(xe))^2",
+            "at x = e: dy/dx = log e/(log e^2)^2 = 1/2"
+          ],
+          "examinerMark": 2,
+          "legible": true
+        }
+      ]
+    },
+    {
+      "page": 4,
+      "isCover": false,
+      "coverTotal": null,
+      "questions": [
+        {
+          "number": "27",
+          "page": 4,
+          "top": 0.07,
+          "bottom": 0.3,
+          "lines": [
+            "Let r = radius of the ice ball at time t.",
+            "V = (4/3)πr^3 ...(1)   S = 4πr^2 ...(2)",
+            "dV/dt ∝ S ⇒ dV/dt = −kS, k > 0 ...(3)",
+            "Differentiating (1) w.r.t. t:",
+            "dV/dt = (4/3)π·3r^2·dr/dt = 4πr^2 dr/dt ...(4)",
+            "From (3) and (4): −kS = 4πr^2 dr/dt",
+            "−kS = S·dr/dt (using (2))",
+            "⇒ dr/dt = −k",
+            "∴ the radius decreases at a constant rate k."
+          ],
+          "examinerMark": 1.5,
+          "legible": true
+        }
+      ]
+    },
+    {
+      "page": 5,
+      "isCover": false,
+      "coverTotal": null,
+      "questions": [
+        {
+          "number": "31",
+          "page": 5,
+          "top": 0.07,
+          "bottom": 0.27,
+          "lines": [
+            "Let A: Mehul selected, B: Rashi selected (independent)",
+            "P(A) = 0.4, P(A ∩ B') + P(A' ∩ B) = 0.5",
+            "Let P(B) = x",
+            "0.4(1 − x) + 0.6x = 0.5",
+            "0.4 − 0.4x + 0.6x = 0.5 ⇒ 0.2x = 0.04",
+            "x = 0.2 ∴ P(Rashi) = 0.2",
+            "P(at least one) = 1 − P(A')P(B')",
+            "= 1 − 0.6 × 0.8 = 0.52"
+          ],
+          "examinerMark": 2,
+          "legible": true
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "number": "24",
+      "summary": "Every step is written, ending with f'(5) = 6.",
+      "steps": [
+        {
+          "id": "24.1",
+          "found": "written",
+          "evidence": "f(5) = f(0) f(5) ⇒ f(0) = 1",
+          "confidence": "high"
+        },
+        {
+          "id": "24.2",
+          "found": "written",
+          "evidence": "= lim h→0 [2 f(h) − 2]/h",
+          "confidence": "high"
+        },
+        {
+          "id": "24.3",
+          "found": "written",
+          "evidence": "= 2 f'(0) = 2 × 3",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "number": "25",
+      "summary": "Complete and correct.",
+      "steps": [
+        {
+          "id": "25.1",
+          "found": "written",
+          "evidence": "OP = ½(OA + OB) = 2i + 2k",
+          "confidence": "high"
+        },
+        {
+          "id": "25.2",
+          "found": "written",
+          "evidence": "Area of ||gm = |OA × OP|",
+          "confidence": "high"
+        },
+        {
+          "id": "25.3",
+          "found": "written",
+          "evidence": "= 2i − 2k",
+          "confidence": "high"
+        },
+        {
+          "id": "25.4",
+          "found": "written",
+          "evidence": "Area = 2√2 sq. units",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "number": "26A",
+      "summary": "Correct until the last line: the value at x = e should be 1/4, not 1/2.",
+      "steps": [
+        {
+          "id": "26A.1",
+          "found": "written",
+          "evidence": "y = x/(1 + log x)",
+          "confidence": "high"
+        },
+        {
+          "id": "26A.2",
+          "found": "written",
+          "evidence": "= log x/(log(xe))^2",
+          "confidence": "high"
+        },
+        {
+          "id": "26A.3",
+          "found": "wrong",
+          "evidence": "dy/dx = log e/(log e^2)^2 = 1/2",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "number": "27",
+      "summary": "The whole proof is written, ending with dr/dt = −k.",
+      "steps": [
+        {
+          "id": "27.1",
+          "found": "written",
+          "evidence": "V = (4/3)πr^3 ... S = 4πr^2",
+          "confidence": "high"
+        },
+        {
+          "id": "27.2",
+          "found": "written",
+          "evidence": "dV/dt = −kS, k > 0",
+          "confidence": "high"
+        },
+        {
+          "id": "27.3",
+          "found": "written",
+          "evidence": "dV/dt = 4πr^2 dr/dt",
+          "confidence": "high"
+        },
+        {
+          "id": "27.4",
+          "found": "written",
+          "evidence": "−kS = S·dr/dt",
+          "confidence": "high"
+        },
+        {
+          "id": "27.5",
+          "found": "written",
+          "evidence": "⇒ dr/dt = −k",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "number": "31",
+      "summary": "An arithmetic slip (0.2x = 0.04) makes P(Rashi) and the last answer wrong.",
+      "steps": [
+        {
+          "id": "31.1",
+          "found": "written",
+          "evidence": "P(A) = 0.4, P(A ∩ B') + P(A' ∩ B) = 0.5",
+          "confidence": "high"
+        },
+        {
+          "id": "31.2",
+          "found": "wrong",
+          "evidence": "0.2x = 0.04, x = 0.2",
+          "confidence": "high"
+        },
+        {
+          "id": "31.3",
+          "found": "wrong",
+          "evidence": "= 1 − 0.6 × 0.8 = 0.52",
+          "confidence": "high"
+        }
+      ]
+    }
+  ]
+}

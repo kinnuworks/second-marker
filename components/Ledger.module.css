@@ -7,9 +7,11 @@
 
 .row {
   display: grid;
-  grid-template-columns: 32px 92px 1fr 100px;
+  grid-template-columns: 32px 1fr auto;
+  grid-template-areas: "tick q stamp" "tick why why";
   align-items: center;
-  gap: 12px;
+  column-gap: 12px;
+  row-gap: 4px;
   padding: 12px 12px 12px 10px;
   background: var(--paper);
   border: 1px solid var(--desk-deep);
@@ -17,7 +19,7 @@
 }
 .open { border-color: var(--green); box-shadow: 0 0 0 2px var(--green-wash); }
 
-.tick { position: relative; display: grid; place-items: center; width: 28px; height: 28px; cursor: pointer; }
+.tick { grid-area: tick; align-self: start; margin-top: 4px; position: relative; display: grid; place-items: center; width: 28px; height: 28px; cursor: pointer; }
 .tick input { position: absolute; inset: 0; opacity: 0; cursor: pointer; margin: 0; }
 .tick input:disabled { cursor: not-allowed; }
 .box { width: 22px; height: 22px; border: 2px solid var(--ink); border-radius: 4px; background: var(--paper); position: relative; }
@@ -29,18 +31,19 @@
 .tick input:disabled + .box { opacity: 0.35; }
 .tick input:focus-visible + .box { outline: 3px solid var(--green); outline-offset: 2px; }
 
-.q { all: unset; cursor: pointer; display: flex; flex-direction: column; gap: 0; }
+.q { all: unset; grid-area: q; cursor: pointer; display: flex; align-items: baseline; gap: 12px; }
 .q:focus-visible { outline: 3px solid var(--green); outline-offset: 4px; border-radius: 4px; }
 .qnum { font-weight: 700; font-size: 18px; }
 .marks { font-size: 20px; display: flex; align-items: baseline; gap: 2px; }
 .of { font-size: 14px; color: var(--muted); }
 .gain { color: var(--green); margin-left: 6px; font-weight: 700; }
 
+.why { grid-area: why; }
 .why p { margin: 0; font-size: 15px; line-height: 1.4; }
 .risk { color: var(--muted); margin-top: 4px !important; font-size: 14px !important; }
 .risk span { font-weight: 600; color: var(--ink-soft); }
 
-.stampCell { display: flex; justify-content: flex-end; }
+.stampCell { grid-area: stamp; display: flex; justify-content: flex-end; }
 
 .skips summary { cursor: pointer; color: var(--ink-soft); font-weight: 600; padding: 6px 0; }
 .skips[open] summary { margin-bottom: 10px; }
@@ -57,8 +60,3 @@
 .totals dd { margin: 0; font-size: 22px; font-weight: 700; }
 .warn { flex-basis: 100%; margin: 0; color: var(--red); font-weight: 600; }
 
-@media (max-width: 640px) {
-  .row { grid-template-columns: 32px 1fr 84px; }
-  .why { grid-column: 2 / 4; }
-  .stampCell { grid-column: 3; grid-row: 1; }
-}

@@ -1,0 +1,14 @@
+{
+  "about": "True values for the demo answer book in public/sample/pages, written by hand from how the pages were made (scripts/sample/pages.mjs).",
+  "coverTotal": 12,
+  "marks": { "1": 1, "2": 1, "3": 0, "4": 1, "5": 1, "24": 1.5, "25": 2, "26A": 2, "27": 1.5, "31": 2 },
+  "steps": {
+    "24": { "24.1": "written", "24.2": "written", "24.3": "written" },
+    "25": { "25.1": "written", "25.2": "written", "25.3": "written", "25.4": "written" },
+    "26A": { "26A.1": "written", "26A.2": "written", "26A.3": "wrong" },
+    "27": { "27.1": "written", "27.2": "written", "27.3": "written", "27.4": "written", "27.5": "written" },
+    "31": { "31.1": "written", "31.2": "wrong", "31.3": "wrong" }
+  },
+  "expectedStamps": { "24": "DISPUTE", "27": "DISPUTE", "25": "SKIP", "26A": "SKIP", "31": "SKIP", "3": "SKIP" },
+  "expectVerification": true
+}
