@@ -1,0 +1,4 @@
+# Local-only folders: never upload them with `vercel deploy`.
+/film
+/demo
+/reference
