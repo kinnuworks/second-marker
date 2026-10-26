@@ -9,6 +9,16 @@ import styles from "./Upload.module.css";
 
 type Mode = "builtin" | "custom";
 
+// Exams with hand-marked scripts and a paid re-mark or review service.
+// Fees change every year, so presets fill the board and currency only.
+const PRESETS = [
+  { board: "IB (enquiry upon results)", currency: "$" },
+  { board: "Cambridge International (review of marking)", currency: "£" },
+  { board: "Pearson Edexcel (review of marking)", currency: "£" },
+  { board: "AQA / OCR (GCSE, A level review)", currency: "£" },
+  { board: "My university or school", currency: "$" },
+];
+
 export function Upload({ onFiles, error }: { onFiles: (files: File[], scheme: Scheme) => void; error?: string | null }) {
   const input = useRef<HTMLInputElement>(null);
   const [over, setOver] = useState(false);
@@ -88,12 +98,19 @@ export function Upload({ onFiles, error }: { onFiles: (files: File[], scheme: Sc
               setCustom(null);
             }}
           />
+          <div className="chips" aria-label="Exam presets">
+            {PRESETS.map((p) => (
+              <button key={p.board} type="button" className="chip" aria-pressed={board === p.board} onClick={() => { setBoard(p.board); setCurrency(p.currency); }}>
+                {p.board.split(" (")[0]}
+              </button>
+            ))}
+          </div>
           <div className={styles.rules}>
             <label>Board, school or university<input value={board} onChange={(e) => setBoard(e.target.value)} placeholder="e.g. IB, Cambridge, my university" /></label>
             <label>Currency<select value={currency} onChange={(e) => setCurrency(e.target.value)}>
               {["$", "£", "€", "₹", "A$", "C$", "¥", "R", "₦", ""].map((c) => <option key={c} value={c}>{c || "none"}</option>)}
             </select></label>
-            <label>Fee per question<input type="number" min={0} value={fee} onChange={(e) => setFee(Math.max(0, Number(e.target.value) || 0))} /></label>
+            <label>Fee per question (check your board)<input type="number" min={0} value={fee} onChange={(e) => setFee(Math.max(0, Number(e.target.value) || 0))} /></label>
             <label>Max questions<input type="number" min={1} value={cap} onChange={(e) => setCap(e.target.value)} placeholder="no limit" /></label>
           </div>
           <div className={styles.row}>

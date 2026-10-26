@@ -22,17 +22,16 @@ export default function Home() {
 
       <main>
         {/* Hero */}
-        <section className="hero hero--split">
+        <section className={`hero hero--split ${styles.paperHero}`}>
           <div className="container">
             <div>
-              <span className="badge badge--dot">For students deciding whether to ask for a re-mark</span>
+              <p className={`hand ${styles.kicker}`}>for students deciding whether to ask for a re-mark</p>
               <h1 className={styles.heroTitle}>
-                Find the marks your examiner <span className="hl">missed</span>.
+                Find the marks your examiner <span className={styles.redpen}>missed</span>.
               </h1>
               <p className="lead">
-                Upload your marked exam paper and the marking scheme it was graded against. Second Marker re-adds every
-                mark, checks each answer step by step, and tells you which questions are worth sending back for a re-mark,
-                and which could cost you marks.
+                Upload your marked paper and its marking scheme. Second Marker checks every answer step by step and tells
+                you which questions are worth sending back for a re-mark.
               </p>
               <div className="cta-row">
                 <Link href="/check?sample=1" className="btn btn-candy btn-lg">
@@ -131,8 +130,8 @@ export default function Home() {
                   credited, or not written, and your own line is quoted next to it.
                 </p>
                 <div className="chips">
-                  <span className="chip">Paste any rubric or answer key</span>
-                  <span className="chip">Built in: CBSE Class 12 Maths</span>
+                  <span className="chip">Tested on CBSE Class 12 Maths</span>
+                  <span className="chip">Paste your own rubric (beta)</span>
                   <span className="chip">Different methods flagged</span>
                 </div>
               </div>
@@ -152,7 +151,7 @@ export default function Home() {
                 <div className={styles.stampPair}>
                   <div>
                     <Stamp kind="DISPUTE" size="md" />
-                    <p className="t-small">The scheme&rsquo;s steps are on your page but weren&rsquo;t given marks.</p>
+                    <p className="t-small">Steps from the scheme are on your page but weren&rsquo;t given marks.</p>
                   </div>
                   <div>
                     <Stamp kind="SKIP" size="md" />
@@ -181,11 +180,11 @@ export default function Home() {
               </details>
               <details>
                 <summary>Can it promise my marks will go up?</summary>
-                <p>No. Your examiners decide. Second Marker shows the evidence on your own page and warns you when a question could lose marks.</p>
+                <p>No. The stamps are signals, not verdicts: they point at evidence on your own page and say how sure the reader was. Your examiners decide, and a re-mark can go either way.</p>
               </details>
               <details>
                 <summary>Which exams does it work with?</summary>
-                <p>Any marked paper, if you have the marking scheme, rubric or answer key: paste it in and Second Marker turns it into steps. One paper is built in and checked by hand: CBSE Class 12 Mathematics 2025–26, with its official scheme.</p>
+                <p>It has been tested on one paper: CBSE Class 12 Mathematics 2025–26, with its official marking scheme typed in and checked by hand. For other exams you can paste your own marking scheme, rubric or answer key; that path is newer and less tested, so check its readings against your page.</p>
               </details>
               <details>
                 <summary>What if my handwriting is hard to read?</summary>

@@ -5,10 +5,10 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import builtIn from "@/data/schemes/cbse-xii-maths-2025-26";
 import { analyse } from "@/lib/analyse";
-import { rulesFor } from "@/lib/ledger";
+import { fmt, rulesFor, summarise } from "@/lib/ledger";
 import { preparePages, PageError, type PreparedPage } from "@/lib/pages";
 import { RunError, runCheck } from "@/lib/run";
-import type { CheckerResult, LedgerRow, PageReading, Scheme } from "@/lib/types";
+import type { CheckerResult, LedgerRow, PageReading, RemarkRules, Scheme } from "@/lib/types";
 import { saveSheet } from "@/lib/sheet";
 import { Ledger } from "./Ledger";
 import { QuestionView } from "./QuestionView";
@@ -180,6 +180,7 @@ function Results({ book }: { book: Book }) {
           {book.sampleFromReader ? " The results are the saved output of the same reader and checker that runs on uploads." : ""}
         </p>
       )}
+      <Verdict rows={rows} rules={rules} recount={analysis.totals.recommendVerification} />
       <TotalsBanner totals={analysis.totals} />
       {unreadablePages.length > 0 && (
         <p className={styles.warn} role="status">
@@ -239,5 +240,32 @@ function Results({ book }: { book: Book }) {
         </aside>
       </div>
     </div>
+  );
+}
+
+/** The answer in one line, before any detail. */
+function Verdict({ rows, rules, recount }: { rows: LedgerRow[]; rules: RemarkRules; recount: boolean }) {
+  const disputes = rows.filter((r) => r.stamp === "DISPUTE");
+  const s = summarise(rows.filter((r) => r.stamp === "DISPUTE"), rules.feePerQuestion, rules.maxQuestions);
+  return (
+    <section className={styles.verdict} aria-live="polite">
+      <p className={styles.verdictLine}>
+        {disputes.length > 0 ? (
+          <>
+            Send back <strong>{disputes.length} question{disputes.length === 1 ? "" : "s"}</strong>{" "}
+            for up to <span className="hand" style={{ color: "var(--green)", fontWeight: 700 }}>+{fmt(s.possibleGain)}</span> marks
+            {rules.feePerQuestion > 0 && <> for {rules.currency}{disputes.length * rules.feePerQuestion}</>}
+            {recount && <>, and ask for a <strong>re-count</strong> first</>}.
+          </>
+        ) : recount ? (
+          <>Ask for a <strong>re-count</strong>: the marks don&rsquo;t add up. No single question is worth a re-mark.</>
+        ) : (
+          <>The marking looks right. <strong>Keep your money.</strong></>
+        )}
+      </p>
+      <p className={styles.verdictSub}>
+        Leave {rows.length - disputes.length} question{rows.length - disputes.length === 1 ? "" : "s"} alone. These are signals from your own page, not a promise: examiners decide, and a re-mark can go either way.
+      </p>
+    </section>
   );
 }
