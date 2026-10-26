@@ -29,7 +29,7 @@ export function ReadingProgress({
                 : "Adding up the marks."}
           </p>
         </div>
-        <button type="button" className="btn btn--ghost" onClick={onCancel}>
+        <button type="button" className="btn btn-outline" onClick={onCancel}>
           Cancel
         </button>
       </header>

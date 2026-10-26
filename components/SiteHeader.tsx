@@ -1,21 +1,28 @@
 import Link from "next/link";
-import styles from "./SiteHeader.module.css";
+import { AppIcon } from "./AppIcon";
 
-export function SiteHeader({ children }: { children?: React.ReactNode }) {
+/** Floating glass pill nav. */
+export function SiteHeader({ children, links }: { children?: React.ReactNode; links?: { href: string; label: string }[] }) {
   return (
-    <header className={`${styles.bar} no-print`}>
-      <div className={`wrap ${styles.inner}`}>
-        <Link href="/" className={styles.brand} aria-label="Second Marker, home">
-          <svg width="30" height="30" viewBox="0 0 64 64" aria-hidden="true">
-            <rect width="64" height="64" rx="12" fill="#FDFDF8" />
-            <path d="M10 18h44M10 30h44M10 42h44M10 54h44" stroke="#CFE3EE" strokeWidth="2" />
-            <path d="M18 6v58" stroke="#E6A3A3" strokeWidth="2" />
-            <path d="M26 34l7 8 16-20" fill="none" stroke="#0B6E4F" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+    <nav className="nav no-print" aria-label="Main">
+      <div className="nav__bar">
+        <Link href="/" className="nav__brand" aria-label="Second Marker, home">
+          <AppIcon className="app-icon" />
           <span>Second Marker</span>
         </Link>
-        <div className={styles.right}>{children}</div>
+        {links ? (
+          <div className="nav__links">
+            {links.map((l) => (
+              <a key={l.href} href={l.href}>
+                {l.label}
+              </a>
+            ))}
+          </div>
+        ) : (
+          <span style={{ marginInline: "auto" }} />
+        )}
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>{children}</div>
       </div>
-    </header>
+    </nav>
   );
 }

@@ -30,12 +30,12 @@ export function FilingSheet() {
   const today = new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
 
   return (
-    <>
+    <div className="app-shell">
       <SiteHeader>
-        <Link href="/check?sample=1" className="btn btn--ghost" onClick={(e) => { if (!data.isSample) { e.preventDefault(); history.back(); } }}>
+        <Link href="/check?sample=1" className="btn btn-outline" onClick={(e) => { if (!data.isSample) { e.preventDefault(); history.back(); } }}>
           Back to results
         </Link>
-        <button type="button" className="btn" onClick={() => window.print()}>
+        <button type="button" className="btn btn-ink" onClick={() => window.print()}>
           Print
         </button>
       </SiteHeader>
@@ -47,7 +47,7 @@ export function FilingSheet() {
               <h1>What to apply for</h1>
               <p className={styles.meta}>{data.paper} · prepared {today}</p>
             </div>
-            {data.isSample && <span className={`${styles.sample} tag tag--amber`}>Sample answer book</span>}
+            {data.isSample && <span className={`${styles.sample} pill pill--amber`}>Sample answer book</span>}
           </header>
 
           <section className={styles.block}>
@@ -124,6 +124,6 @@ export function FilingSheet() {
           </footer>
         </article>
       </main>
-    </>
+    </div>
   );
 }

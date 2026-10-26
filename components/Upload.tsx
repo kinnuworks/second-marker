@@ -21,7 +21,7 @@ export function Upload({ onFiles, error }: { onFiles: (files: File[]) => void; e
         Add the scanned copy of your marked answer book: the PDF the board sent, or a photo of each page.
       </p>
       <p className={styles.paper}>
-        <span className="tag tag--green">Supported</span> CBSE Class 12 Mathematics, 2025–26 sample paper, with its official
+        <span className="pill pill--green">Supported</span> CBSE Class 12 Mathematics, 2025–26 sample paper, with its official
         marking scheme. Other papers aren&rsquo;t supported yet.
       </p>
 

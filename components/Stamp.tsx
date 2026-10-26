@@ -21,7 +21,7 @@ export function Stamp({ kind, size = "md", animate = false }: { kind: StampKind;
         <g filter={`url(#rough-${kind})`}>
           <rect x="4" y="4" width="152" height="48" rx="6" fill="none" stroke="currentColor" strokeWidth="5" />
           <rect x="10" y="10" width="140" height="36" rx="3" fill="none" stroke="currentColor" strokeWidth="1.5" />
-          <text x="80" y="37" textAnchor="middle" fontSize="24" fontWeight="700" letterSpacing="4" fill="currentColor" fontFamily="var(--font-sans)">
+          <text x="80" y="37" textAnchor="middle" fontSize="24" fontWeight="700" letterSpacing="4" fill="currentColor" fontFamily="var(--font-display)">
             {label}
           </text>
         </g>

@@ -1,4 +1,4 @@
-.main { padding-top: 28px; padding-bottom: 64px; }
+.main { padding-top: 100px; padding-bottom: 64px; }
 .loading { color: var(--ink-soft); }
 .results { display: flex; flex-direction: column; gap: 18px; }
 .sampleNote { margin: 0; font-size: 14px; color: var(--amber); background: var(--amber-wash); padding: 8px 12px; border-radius: 6px; }

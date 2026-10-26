@@ -19,7 +19,7 @@ import { Upload } from "./Upload";
 import styles from "./CheckApp.module.css";
 
 type Page = { page: number; src: string; width: number; height: number };
-type Book = { pages: Page[]; readings: PageReading[]; results: CheckerResult[]; isSample: boolean };
+type Book = { pages: Page[]; readings: PageReading[]; results: CheckerResult[]; isSample: boolean; sampleFromReader?: boolean };
 
 export function CheckApp() {
   const params = useSearchParams();
@@ -39,7 +39,7 @@ export function CheckApp() {
     let live = true;
     fetch("/sample/result.json")
       .then((r) => r.json())
-      .then((d) => live && setBook({ pages: d.pages, readings: d.readings, results: d.results, isSample: true }))
+      .then((d) => live && setBook({ pages: d.pages, readings: d.readings, results: d.results, isSample: true, sampleFromReader: !String(d.about).includes("TEMPORARY") }))
       .catch(() => live && setError("The sample couldn't be loaded. Refresh to try again."));
     return () => {
       live = false;
@@ -104,12 +104,12 @@ export function CheckApp() {
   };
 
   return (
-    <>
+    <div className="app-shell">
       <SiteHeader>
         {book && (
           <>
-            {book.isSample && <span className="tag tag--amber">Sample answer book</span>}
-            <button type="button" className="btn btn--ghost" onClick={reset}>
+            {book.isSample && <span className="pill pill--amber">Sample answer book</span>}
+            <button type="button" className="btn btn-outline" onClick={reset}>
               Check another
             </button>
           </>
@@ -126,7 +126,7 @@ export function CheckApp() {
           <Upload onFiles={start} error={error} />
         )}
       </main>
-    </>
+    </div>
   );
 }
 
@@ -172,7 +172,8 @@ function Results({ book }: { book: Book }) {
     <div className={styles.results}>
       {book.isSample && (
         <p className={styles.sampleNote}>
-          This is a sample answer book written for this demo. The results are the saved output of the same reader and checker that runs on uploads.
+          This is a sample answer book written for this demo.
+          {book.sampleFromReader ? " The results are the saved output of the same reader and checker that runs on uploads." : ""}
         </p>
       )}
       <TotalsBanner totals={analysis.totals} />
@@ -224,7 +225,7 @@ function Results({ book }: { book: Book }) {
             openNumber={open}
             animate
           />
-          <button type="button" className={`btn btn--green ${styles.sheetBtn}`} onClick={toSheet} disabled={!rows.some((r) => r.selected) && !analysis.totals.recommendVerification}>
+          <button type="button" className={`btn btn-candy ${styles.sheetBtn}`} onClick={toSheet} disabled={!rows.some((r) => r.selected) && !analysis.totals.recommendVerification}>
             Make my filing sheet
           </button>
           <p className={styles.small}>

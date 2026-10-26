@@ -1,4 +1,0 @@
-.bar { position: sticky; top: 0; z-index: 10; background: rgba(232, 238, 242, 0.92); backdrop-filter: blur(6px); border-bottom: 1px solid var(--desk-deep); }
-.inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 60px; }
-.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 19px; color: var(--ink); text-decoration: none; }
-.right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
