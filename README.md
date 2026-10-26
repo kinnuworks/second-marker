@@ -4,6 +4,8 @@ Find the marks your examiner missed.
 
 After CBSE board results, a Class 12 student can buy the scanned copy of their marked answer book and then pay ₹100 per question for re-evaluation, up to 10 questions per subject, inside a window of a few days. A second look can lower marks as well as raise them, so the hard part is knowing which questions to pay for.
 
+The same choice comes up worldwide. In England in summer 2025, 301,980 GCSE and A level grades were challenged and 72,875 changed ([Ofqual](https://www.gov.uk/government/statistics/reviews-of-marking-and-moderation-for-gcse-as-and-a-level-summer-2025-exam-series/reviews-of-marking-and-moderation-for-gcse-as-and-a-level-summer-2025-exam-series)). Scotland's SQA received 50,805 appeals in 2025 ([SQA](https://www.sqa.org.uk/sqa/115727.html)). CBSE received 43,980 Class 12 re-evaluation and verification applications by 3 June 2026 ([India TV](https://www.indiatvnews.com/education/news/cbse-re-evaluation-portal-accepts-over-43-000-applications-details-here-2026-06-03-1043508)).
+
 Second Marker reads the scanned copy, re-adds every mark the examiner wrote, and lines each answer up against the board's official marking scheme step by step. Each question is stamped DISPUTE or SKIP with the possible gain, the fee and the risk, and the confirmed picks print as a filing sheet.
 
 **Try it:** https://second-marker.vercel.app (the sample answer book opens in one click, no account)

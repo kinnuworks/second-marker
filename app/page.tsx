@@ -55,14 +55,14 @@ export default function Home() {
         <section className={`section ${styles.factsBand}`} aria-label="How re-evaluation works">
           <div className="container">
             <div className={styles.facts}>
-              <Fact big="fee" small="many boards charge for a re-mark, per question or per paper" />
-              <Fact big="days" small="is often all the time you get to ask" />
-              <Fact big="↓" small="a second look can lower your marks too" red />
-              <Fact big="28,000+" small="re-mark and re-count requests to one board, CBSE, in 2025" />
+              <Fact big="301,980" small="GCSE and A level grades challenged in England, summer 2025" />
+              <Fact big="1 in 4" small="of those challenged grades changed: 72,875 grades" />
+              <Fact big="50,805" small="appeals to the SQA in Scotland, 2025" />
+              <Fact big="43,980" small="CBSE Class 12 re-evaluation requests in India, by 3 June 2026" />
             </div>
             <p className={styles.factNote}>
-              The usual advice is to have a teacher look over your paper before you ask. Few teachers have time to go through
-              twenty pages in the few days the window is open.
+              Re-marks usually cost money and the window to ask is short. A grade can go down after review too, though in England
+              that happened to under 0.1% of challenged grades. Knowing which questions to send back is the hard part.
             </p>
           </div>
         </section>
@@ -230,7 +230,10 @@ export default function Home() {
             Sources: <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2025_26/Maths-MS.pdf">marking scheme</a>,{" "}
             <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2025_26/Maths-SQP.pdf">sample paper</a>,{" "}
             <a href="https://www.pw.live/news/cbse-class-12-re-evaluation-2026">fees and process</a>,{" "}
-            <a href="https://news.careers360.com/cbse-class-12-revaluation-verification-results-2025-out-at-results-cbse-nic-in/amp">28,000+ requests in 2025</a>
+            <a href="https://www.gov.uk/government/statistics/reviews-of-marking-and-moderation-for-gcse-as-and-a-level-summer-2025-exam-series/reviews-of-marking-and-moderation-for-gcse-as-and-a-level-summer-2025-exam-series">Ofqual 2025</a>,{" "}
+            <a href="https://www.sqa.org.uk/sqa/115727.html">SQA 2025</a>,{" "}
+            <a href="https://www.indiatvnews.com/education/news/cbse-re-evaluation-portal-accepts-over-43-000-applications-details-here-2026-06-03-1043508">CBSE 2026</a>,{" "}
+            <a href="https://cambridgeinternational.org/Images/717419-enquiries-about-results-and-marks-on-scripts.pdf">Cambridge</a>
           </span>
           <span>
             Planned with the <a href="https://github.com/challengepost/learn-ai-basics">Devpost Learn skill pack</a>
